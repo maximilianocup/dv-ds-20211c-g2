@@ -1,16 +1,15 @@
 package ar.edu.davinci.dvds20211cg2.domain;
 
+
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -19,39 +18,34 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// Parte de la configuración de JPA
 @Entity
-@Table(name="prendas")
+@Table(name="clientes")
 
-// Configuración de lombok
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 
-public class Prenda implements Serializable {
+public class Cliente implements Serializable {
 
-
-	private static final long serialVersionUID = 3202089571512147315L;
+	
+	private static final long serialVersionUID = 6363777413501451503L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
 	@GenericGenerator(name = "native", strategy = "native")
-	@Column(name = "prd_id")
+	@Column(name = "cli_id")
 	private Long id;
 	
-	@Column(name = "prd_descripcion")
-	private String descripcion;
-
-	@Column(name = "prd_tipo_prenda")
-	@Enumerated(EnumType.STRING)
-	private TipoPrenda tipo;
+	@Column(name = "cli_nombre")
+	private String nombre;
 	
-	@Column(name = "prd_precio_base")
-	private BigDecimal precioBase;
+	@Column(name = "cli_apellido")
+	private String apellido;
 	
-	public BigDecimal getPrecioFinal() {
-		return precioBase;
+	
+	public String getRazonSocial() {
+		return nombre + " " + apellido;
 	}
-	
+
 }
