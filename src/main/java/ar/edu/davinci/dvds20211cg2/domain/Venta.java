@@ -3,6 +3,8 @@ package ar.edu.davinci.dvds20211cg2.domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +31,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import ar.edu.davinci.dvds20211cg2.Constantes;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -109,5 +112,10 @@ public abstract class Venta implements Serializable {
 			this.items = new ArrayList<Item>();
 		}
 		this.items.add(item);
+	}
+	
+	public String getFormatoFecha() {
+		DateFormat formatearFecha = new SimpleDateFormat(Constantes.FORMATO_FECHA);
+		return formatearFecha.format(getFecha());
 	}
 }	

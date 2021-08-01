@@ -14,5 +14,6 @@ public class VentaEfectivoRequest {
 	
 	private Long clienteId;
 	
+	
 }
 

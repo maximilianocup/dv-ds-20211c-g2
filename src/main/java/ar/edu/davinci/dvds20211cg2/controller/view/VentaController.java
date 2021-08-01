@@ -19,8 +19,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.davinci.dvds20211cg2.controller.TiendaApp;
+import ar.edu.davinci.dvds20211cg2.domain.Item;
 import ar.edu.davinci.dvds20211cg2.domain.Venta;
+import ar.edu.davinci.dvds20211cg2.domain.VentaEfectivo;
+import ar.edu.davinci.dvds20211cg2.domain.VentaTarjeta;
 import ar.edu.davinci.dvds20211cg2.exception.BusinessException;
+import ar.edu.davinci.dvds20211cg2.service.ClienteService;
+import ar.edu.davinci.dvds20211cg2.service.PrendaService;
 import ar.edu.davinci.dvds20211cg2.service.VentaService;
 
 
@@ -31,7 +36,10 @@ public class VentaController extends TiendaApp {
 	
 	@Autowired
 	private VentaService ventaService;
-	
+	@Autowired
+	private ClienteService clienteService;
+	@Autowired
+	private PrendaService prendaService;
 	
 	@GetMapping(path = "ventas/list")
 	public String showVentaPage(Model model) {
@@ -47,23 +55,54 @@ public class VentaController extends TiendaApp {
 		return "ventas/list_ventas";
 	}
 	
-	@GetMapping(path = "/ventas/new")
-	public String showNewVentaPage(Model model) {
-		LOGGER.info("GET - showNewVentaPage - /ventas/new");
-//		Venta venta = new Venta();
-//		model.addAttribute("venta", venta);
-//		model.addAttribute("tipoVentas", ventaService.getTipoVentas());
-//
-//		LOGGER.info("ventas: " + venta.toString());
+	@GetMapping(path = "ventas/tarjeta/new")
+	public String showNewVentaTarjetaPage(Model model) {
+		LOGGER.info("GET - showNewVentaPage - /ventas/tarjeta/new");
+		Venta venta = new VentaTarjeta();
+		model.addAttribute("venta", venta);
+		model.addAttribute("razonSocial", venta.getRazonSocial());
+		model.addAttribute("fecha", venta.getFormatoFecha());
+		
+	//	model.addAttribute("tipoVentas", ventaService.getTipoVentas());
 
-		return "ventas/new_ventas";
+		LOGGER.info("ventas: " + venta.toString());
+
+		return "ventas/new_ventas_tarjeta";
 	}
 	
-	@PostMapping(value = "/ventas/save")
-	public String saveVenta(@ModelAttribute("venta") Venta venta) {
+	@GetMapping(path = "ventas/efectivo/new")
+	public String showNewVentaEfectivoPage(Model model) {
+		LOGGER.info("GET - showNewVentaPage - /ventas/efectivo/new");
+		Venta venta = new VentaEfectivo();
+		Item item = new Item();
+	//	model.addAttribute("venta", venta);
+		//model.addAttribute("razonSocial", venta.getRazonSocial());
+	//	model.addAttribute("fecha", venta.getFormatoFecha());
+		model.addAttribute("venta", venta);
+		model.addAttribute("cliente", clienteService.listAll());
+		model.addAttribute("listPrendas", prendaService.list());
+		model.addAttribute("item", item);
+	//	model.addAttribute("tipoVentas", ventaService.getTipoVentas());
+
+		LOGGER.info("ventas: " + venta.toString());
+
+		return "ventas/new_ventas_efectivo";
+	}
+	
+	@PostMapping(value = "/ventas/efectivo/save")
+	public String saveVenta(@ModelAttribute("venta") VentaEfectivo venta) throws BusinessException {
 		LOGGER.info("POST - saveVenta - /ventas/save");
 		LOGGER.info("venta: " + venta.toString());
-//		ventaService.save(venta);
+		ventaService.save(venta);
+
+		return "redirect:/tienda/ventas/list";
+	}
+	
+	@PostMapping(value = "/ventas/tarjeta/save")
+	public String saveVenta(@ModelAttribute("venta") VentaTarjeta venta) throws BusinessException {
+		LOGGER.info("POST - saveVenta - /ventas/save");
+		LOGGER.info("venta: " + venta.toString());
+		ventaService.save(venta);
 
 		return "redirect:/tienda/ventas/list";
 	}
