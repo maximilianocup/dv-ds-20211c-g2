@@ -3,11 +3,11 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8" />
-<title>Crea un nuevo Prenda Tarjeta</title>
+<title>Crea un nuevo ventas Efectivo</title>
 </head>
 <body>
 	<div align="center">
-		<h1>Crear una nueva venta con Tarjeta</h1>
+		<h1>Crear una nueva ventas en Efectivo</h1>
 		<br />
 		<table>
 			<tbody>
@@ -19,33 +19,33 @@
 			</tbody>
 		</table>
 		<br />
-		<form action="#" th:action="@{/tienda/ventas/save}"
+		<form action="#" th:action="@{/tienda/ventas/efectivo/save}"
 			th:object="${venta}" method="post">
 
 			<table border="0" cellpadding="10">
 				<tr>
 					<td>Cliente:</td>
-					<td><input type="text" th:object="${RazonSocial}" /></td>
-				</tr>
- 
-					<td>Tipo:</td>
-					<td th:object="${tipoPrendas}">
-					    <select id="tipo" name="tipo">
-					        <option value="">Elija un tipo</option>
-					        <option th:each="tipoPrenda : ${tipoPrendas}"
-					                th:value="${tipoPrenda}"
-					                th:text="${tipoPrenda.descripcion}">
+					<td th:object="${cliente}">
+					    <select id="cliente" name="cliente">
+					        <option value="">Elija un cliente</option>
+					        <option th:each="cliente : ${cliente}"
+					                th:value="${cliente.id}"
+					                th:text="${cliente.getRazonSocial}">
 					        </option>
 					    </select>
 					</td>
+					
+				
 				</tr>
 				<tr>
-					<td>Fecha Venta:</td>
-					<td><input type="text" th:object="${fecha}" /></td>
+			
+					<td>Cuotas:</td>
+					<td><input type="text" th:field="*{cantidadCuotas}" /></td>
+			
+					
+				
 				</tr>
-				<tr>
-					<td colspan="2"><button type="submit">Grabar</button></td>
-				</tr>
+						<td colspan="2"><button type="submit">Grabar</button></td>
 			</table>
 		</form>
 	</div>

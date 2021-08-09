@@ -25,6 +25,7 @@ import ar.edu.davinci.dvds20211cg2.domain.VentaEfectivo;
 import ar.edu.davinci.dvds20211cg2.domain.VentaTarjeta;
 import ar.edu.davinci.dvds20211cg2.exception.BusinessException;
 import ar.edu.davinci.dvds20211cg2.service.ClienteService;
+import ar.edu.davinci.dvds20211cg2.service.ItemService;
 import ar.edu.davinci.dvds20211cg2.service.PrendaService;
 import ar.edu.davinci.dvds20211cg2.service.VentaService;
 
@@ -40,6 +41,8 @@ public class VentaController extends TiendaApp {
 	private ClienteService clienteService;
 	@Autowired
 	private PrendaService prendaService;
+	@Autowired
+	private ItemService itemService;
 	
 	@GetMapping(path = "ventas/list")
 	public String showVentaPage(Model model) {
@@ -60,8 +63,8 @@ public class VentaController extends TiendaApp {
 		LOGGER.info("GET - showNewVentaPage - /ventas/tarjeta/new");
 		Venta venta = new VentaTarjeta();
 		model.addAttribute("venta", venta);
-		model.addAttribute("razonSocial", venta.getRazonSocial());
-		model.addAttribute("fecha", venta.getFormatoFecha());
+		model.addAttribute("cliente", clienteService.listAll());
+		model.addAttribute("listPrendas", prendaService.list());
 		
 	//	model.addAttribute("tipoVentas", ventaService.getTipoVentas());
 
@@ -74,14 +77,14 @@ public class VentaController extends TiendaApp {
 	public String showNewVentaEfectivoPage(Model model) {
 		LOGGER.info("GET - showNewVentaPage - /ventas/efectivo/new");
 		Venta venta = new VentaEfectivo();
-		Item item = new Item();
+		
 	//	model.addAttribute("venta", venta);
 		//model.addAttribute("razonSocial", venta.getRazonSocial());
 	//	model.addAttribute("fecha", venta.getFormatoFecha());
 		model.addAttribute("venta", venta);
 		model.addAttribute("cliente", clienteService.listAll());
 		model.addAttribute("listPrendas", prendaService.list());
-		model.addAttribute("item", item);
+		
 	//	model.addAttribute("tipoVentas", ventaService.getTipoVentas());
 
 		LOGGER.info("ventas: " + venta.toString());
@@ -117,6 +120,7 @@ public class VentaController extends TiendaApp {
 			
 			Venta venta = ventaService.findById(ventaId);
 			mav.addObject("venta", venta);
+			mav.addObject("listItems", venta.getItems());
 			
 		} catch (BusinessException e) {
 			// TODO Auto-generated catch block
